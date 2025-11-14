@@ -9,8 +9,8 @@ import java.util.List;
 
 @Getter
 public class ConveyorConfig {
-    private final int queueALength;
-    private final int queueBLength;
+    private final Integer queueALength;
+    private final Integer queueBLength;
     private final List<IntersectionPoint> intersections;
 
     private ConveyorConfig(Builder builder) {
@@ -21,23 +21,35 @@ public class ConveyorConfig {
     }
 
     private void validate() {
-        if (queueALength <= 0 || queueBLength <= 0) {
+        validateQueueLengths();
+        validateIntersections();
+    }
+
+    private void validateQueueLengths() {
+        if (!isValidLength(queueALength) || !isValidLength(queueBLength)) {
             throw new InvalidConveyorConfigException("Длины очередей должны быть положительными");
         }
+    }
 
-        for (IntersectionPoint intersection : intersections) {
-            if (intersection.getPositionInA() >= queueALength) {
-                throw new InvalidConveyorConfigException(
-                    String.format("Позиция пересечения в очереди A (%d) выходит за границы очереди (длина: %d)",
-                        intersection.getPositionInA(), queueALength)
-                );
-            }
-            if (intersection.getPositionInB() >= queueBLength) {
-                throw new InvalidConveyorConfigException(
-                    String.format("Позиция пересечения в очереди B (%d) выходит за границы очереди (длина: %d)",
-                        intersection.getPositionInB(), queueBLength)
-                );
-            }
+    private boolean isValidLength(Integer length) {
+        return length != null && length > 0;
+    }
+
+    private void validateIntersections() {
+        intersections.forEach(this::validateIntersection);
+    }
+
+    private void validateIntersection(IntersectionPoint intersection) {
+        validateIntersectionPosition(intersection.getPositionInA(), queueALength, "A");
+        validateIntersectionPosition(intersection.getPositionInB(), queueBLength, "B");
+    }
+
+    private void validateIntersectionPosition(Integer position, Integer queueLength, String queueName) {
+        if (position >= queueLength) {
+            throw new InvalidConveyorConfigException(
+                String.format("Позиция пересечения в очереди %s (%d) выходит за границы очереди (длина: %d)",
+                    queueName, position, queueLength)
+            );
         }
     }
 
@@ -46,21 +58,21 @@ public class ConveyorConfig {
     }
 
     public static class Builder {
-        private int queueALength;
-        private int queueBLength;
+        private Integer queueALength;
+        private Integer queueBLength;
         private final List<IntersectionPoint> intersections = new ArrayList<>();
 
-        public Builder queueALength(int length) {
+        public Builder queueALength(Integer length) {
             this.queueALength = length;
             return this;
         }
 
-        public Builder queueBLength(int length) {
+        public Builder queueBLength(Integer length) {
             this.queueBLength = length;
             return this;
         }
 
-        public Builder addIntersection(int positionInA, int positionInB) {
+        public Builder addIntersection(Integer positionInA, Integer positionInB) {
             this.intersections.add(new IntersectionPoint(positionInA, positionInB));
             return this;
         }

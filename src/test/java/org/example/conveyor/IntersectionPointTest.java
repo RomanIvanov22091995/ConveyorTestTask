@@ -38,4 +38,3 @@ class IntersectionPointTest {
         assertDoesNotThrow(() -> new IntersectionPoint(0, 0));
     }
 }
-

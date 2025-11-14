@@ -26,7 +26,7 @@ class ConveyorConfigTest {
     @Test
     @DisplayName("Отклонение отрицательной длины очереди A")
     void shouldRejectNegativeQueueALength() {
-            assertThrows(InvalidConveyorConfigException.class, () -> 
+        assertThrows(InvalidConveyorConfigException.class, () -> 
             ConveyorConfig.builder()
                     .queueALength(-1)
                     .queueBLength(5)
@@ -37,7 +37,7 @@ class ConveyorConfigTest {
     @Test
     @DisplayName("Отклонение нулевой длины очереди B")
     void shouldRejectZeroQueueBLength() {
-            assertThrows(InvalidConveyorConfigException.class, () -> 
+        assertThrows(InvalidConveyorConfigException.class, () -> 
             ConveyorConfig.builder()
                     .queueALength(5)
                     .queueBLength(0)
@@ -48,7 +48,7 @@ class ConveyorConfigTest {
     @Test
     @DisplayName("Отклонение пересечения за границами очереди A")
     void shouldRejectIntersectionOutOfBoundsInA() {
-            assertThrows(InvalidConveyorConfigException.class, () -> 
+        assertThrows(InvalidConveyorConfigException.class, () -> 
             ConveyorConfig.builder()
                     .queueALength(3)
                     .queueBLength(5)
@@ -60,7 +60,7 @@ class ConveyorConfigTest {
     @Test
     @DisplayName("Отклонение пересечения за границами очереди B")
     void shouldRejectIntersectionOutOfBoundsInB() {
-            assertThrows(InvalidConveyorConfigException.class, () -> 
+        assertThrows(InvalidConveyorConfigException.class, () -> 
             ConveyorConfig.builder()
                     .queueALength(5)
                     .queueBLength(3)
@@ -94,4 +94,3 @@ class ConveyorConfigTest {
         assertEquals(3, config.getIntersections().size());
     }
 }
-
