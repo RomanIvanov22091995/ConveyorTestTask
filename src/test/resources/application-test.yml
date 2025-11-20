@@ -1,0 +1,21 @@
+spring:
+  r2dbc:
+    url: ${TEST_DATABASE_URL:r2dbc:postgresql://localhost:5432/testdb}
+    username: ${TEST_DATABASE_USERNAME:postgres}
+    password: ${TEST_DATABASE_PASSWORD:postgres}
+  
+  sql:
+    init:
+      mode: never
+
+app:
+  data:
+    init:
+      enabled: false
+
+logging:
+  level:
+    org.example: DEBUG
+    org.springframework.data.r2dbc: DEBUG
+    org.testcontainers: INFO
+
